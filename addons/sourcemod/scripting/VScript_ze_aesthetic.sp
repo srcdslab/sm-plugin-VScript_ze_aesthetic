@@ -8,6 +8,7 @@
 
 #include <sourcemod>
 #include <sdktools>
+#include <sdkhooks>
 #include <vscripts/Aesthetic>
 
 #pragma newdecls required
@@ -302,28 +303,52 @@ public void OnPurpleEndPass(const char[] output, int caller, int activator, floa
 	}
 }
 
+public void OnEntityCreated(int entity, const char[] classname)
+{
+	if (!bValidMap)
+		return;
+
+	if (!CanTestFeatures() || GetFeatureStatus(FeatureType_Native, "SDKHook_OnEntitySpawned") != FeatureStatus_Available)
+		SDKHook(entity, SDKHook_SpawnPost, OnEntitySpawnedPost);
+}
+
+public void OnEntitySpawnedPost(int entity)
+{
+	if (!IsValidEntity(entity))
+		return;
+
+	// 1 frame later required to get some properties
+	RequestFrame(ProcessEntitySpawned, entity);
+}
+
 public void OnEntitySpawned(int entity, const char[] classname)
 {
-	if(!bValidMap)
+	ProcessEntitySpawned(entity);
+}
+
+stock void ProcessEntitySpawned(int entity)
+{
+	if (!bValidMap || !IsValidEntity(entity))
 		return;
-	if(IsValidEntity(entity))
+
+	char classname[64];
+	GetEntityClassname(entity, classname, sizeof(classname));
+
+	if(strcmp(classname, "func_breakable") == 0)
 	{
-		if(strcmp(classname, "func_breakable") == 0)
-		{
-			char sName[128];
-			GetEntPropString(entity, Prop_Data, "m_iName", sName, sizeof(sName));
-			if(!sName[0])
-				return;
-			int pos = FindCharInString(sName, '&', true);
-			if(pos != -1)
-			{	sName[pos] = 0;
-				if(strcmp(sName, "EyeBoss") == 0)
-				{
-					
-					Eye eye = new Eye(entity);
-					HookSingleEntityOutput(entity, "OnUser2", OnEyeMove);
-					g_aEyes.Push(eye);
-				}
+		char sName[128];
+		GetEntPropString(entity, Prop_Data, "m_iName", sName, sizeof(sName));
+		if(!sName[0])
+			return;
+		int pos = FindCharInString(sName, '&', true);
+		if(pos != -1)
+		{	sName[pos] = 0;
+			if(strcmp(sName, "EyeBoss") == 0)
+			{
+				
+				Eye eye = new Eye(entity);
+				HookSingleEntityOutput(entity, "OnUser2", OnEyeMove);
+				g_aEyes.Push(eye);
 			}
 		}
 	}
@@ -331,7 +356,6 @@ public void OnEntitySpawned(int entity, const char[] classname)
 
 public void OnEyeMove(const char[] output, int caller, int activator, float delay)
 {
-	
 	for (int i = 0; i < g_aEyes.Length; i++)
 	{
 		Eye tmp = view_as<Eye>(g_aEyes.Get(i));
@@ -347,27 +371,31 @@ public void OnEntityDestroyed(int entity)
 {
 	if(!bValidMap)
 		return;
-	if(IsValidEntity(entity))
+
+	if (!CanTestFeatures() || GetFeatureStatus(FeatureType_Native, "SDKHook_OnEntitySpawned") != FeatureStatus_Available)
+		SDKUnhook(entity, SDKHook_SpawnPost, OnEntitySpawnedPost);
+
+	if(!IsValidEntity(entity))
+		return;
+
+	char sClassname[64];
+	GetEntityClassname(entity, sClassname, sizeof(sClassname));
+	if(strcmp(sClassname, "func_breakable") == 0)
 	{
-		char sClassname[64];
-		GetEntityClassname(entity, sClassname, sizeof(sClassname));
-		if(strcmp(sClassname, "func_breakable") == 0)
+		char sName[128];
+		GetEntPropString(entity, Prop_Data, "m_iName", sName, sizeof(sName));
+		if(!sName[0])
+			return;
+		if(StrContains(sName, "EyeBoss") != -1)
 		{
-			char sName[128];
-			GetEntPropString(entity, Prop_Data, "m_iName", sName, sizeof(sName));
-			if(!sName[0])
-				return;
-			if(StrContains(sName, "EyeBoss") != -1)
+			for (int i = 0; i < g_aEyes.Length; i++)
 			{
-				for (int i = 0; i < g_aEyes.Length; i++)
+				Eye tmp = view_as<Eye>(g_aEyes.Get(i));
+				if(entity == tmp.entity)
 				{
-					Eye tmp = view_as<Eye>(g_aEyes.Get(i));
-					if(entity == tmp.entity)
-					{
-						
-						delete tmp;
-						g_aEyes.Erase(i);
-					}
+					
+					delete tmp;
+					g_aEyes.Erase(i);
 				}
 			}
 		}
