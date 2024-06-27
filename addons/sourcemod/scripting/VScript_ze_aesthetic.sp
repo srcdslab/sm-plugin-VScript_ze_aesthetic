@@ -1,9 +1,5 @@
 #pragma semicolon 1
 
-#define DEBUG
-
-#define PLUGIN_AUTHOR "Cloud Strife"
-#define PLUGIN_VERSION "1.00"
 #define MAP_NAME "ze_a_e_s_t_h_e_t_i_c_v1_1s"
 
 #include <sourcemod>
@@ -20,9 +16,9 @@ ArrayList g_aEyes = null;
 public Plugin myinfo = 
 {
 	name = "Aesthetic vscripts",
-	author = PLUGIN_AUTHOR,
+	author = "Cloud Strife",
 	description = "",
-	version = PLUGIN_VERSION,
+	version = "1.1.0",
 	url = "https://steamcommunity.com/id/cloudstrifeua/"
 };
 
@@ -50,68 +46,68 @@ public void OnRoundStart(Event event, const char[] name, bool dontBroadcast)
 {
 	if(!bValidMap)
 		return;
-	g_Chess = new Chess(GetEntityIndexByName("GreenStart", "path_track"), GetEntityIndexByName("GreenEnd", "path_track"), 
-						GetEntityIndexByName("PurpleStart", "path_track"), GetEntityIndexByName("PurpleEnd", "path_track"));
-	int tmp = GetEntityIndexByName("GreenEnd", "path_track");
+	g_Chess = new Chess(Vscripts_GetEntityIndexByName("GreenStart", "path_track"), Vscripts_GetEntityIndexByName("GreenEnd", "path_track"), 
+						Vscripts_GetEntityIndexByName("PurpleStart", "path_track"), Vscripts_GetEntityIndexByName("PurpleEnd", "path_track"));
+	int tmp = Vscripts_GetEntityIndexByName("GreenEnd", "path_track");
 	
 	HookSingleEntityOutput(tmp, "OnPass", OnGreenEndPass);
-	tmp = GetEntityIndexByName("PurpleEnd", "path_track");
+	tmp = Vscripts_GetEntityIndexByName("PurpleEnd", "path_track");
 	
 	HookSingleEntityOutput(tmp, "OnPass", OnPurpleEndPass);
-	tmp = GetEntityIndexByHammerID(92835, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92835, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton1);
-	tmp = GetEntityIndexByHammerID(92838, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92838, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton2);
-	tmp = GetEntityIndexByHammerID(92841, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92841, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton3);
-	tmp = GetEntityIndexByHammerID(92844, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92844, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton4);
-	tmp = GetEntityIndexByHammerID(92850, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92850, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton5);
-	tmp = GetEntityIndexByHammerID(92847, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92847, "func_button");
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton6);
-	tmp = GetEntityIndexByHammerID(92853, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92853, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton7);
-	tmp = GetEntityIndexByHammerID(92856, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92856, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPurpleButton8);
-	tmp = GetEntityIndexByHammerID(92013, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92013, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton1);
-	tmp = GetEntityIndexByHammerID(92084, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92084, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton2);
-	tmp = GetEntityIndexByHammerID(91906, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(91906, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton3);
-	tmp = GetEntityIndexByHammerID(92081, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92081, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton4);
-	tmp = GetEntityIndexByHammerID(92016, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92016, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton5);
-	tmp = GetEntityIndexByHammerID(92075, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92075, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton6);
-	tmp = GetEntityIndexByHammerID(89814, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(89814, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton7);
-	tmp = GetEntityIndexByHammerID(92046, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(92046, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnGreenButton8);
-	tmp = GetEntityIndexByHammerID(89040, "func_button");
+	tmp = Vscripts_GetEntityIndexByHammerID(89040, "func_button");
 	
 	HookSingleEntityOutput(tmp, "OnPressed", OnPressedTrig, true);
-	tmp = GetEntityIndexByHammerID(490936, "trigger_push");
+	tmp = Vscripts_GetEntityIndexByHammerID(490936, "trigger_push");
 	
 	HookSingleEntityOutput(tmp, "OnStartTouch", OnPushTrigger);
-	tmp = GetEntityIndexByHammerID(445713, "trigger_push");
+	tmp = Vscripts_GetEntityIndexByHammerID(445713, "trigger_push");
 	
 	HookSingleEntityOutput(tmp, "OnStartTouch", OnPushTrigger2);
 }
@@ -120,18 +116,18 @@ public void OnPushTrigger2(const char[] output, int caller, int activator, float
 {
 	
 	float tmp[3];
-	GetOrigin(activator, tmp);
+	Vscripts_GetOrigin(activator, tmp);
 	tmp[2] += 2.0;
-	SetOrigin(activator, tmp);
+	Vscripts_SetOrigin(activator, tmp);
 }
 
 public void OnPushTrigger(const char[] output, int caller, int activator, float delay)
 {
 	
 	float tmp[3];
-	GetOrigin(activator, tmp);
+	Vscripts_GetOrigin(activator, tmp);
 	tmp[2] += 4.0;
-	SetOrigin(activator, tmp);
+	Vscripts_SetOrigin(activator, tmp);
 }
 
 public void OnPressedTrig(const char[] output, int caller, int activator, float delay)
