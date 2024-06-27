@@ -132,13 +132,13 @@ methodmap Chess < Basic
 	public void UpdateGreenEnd(float dx, float dy) 
 	{
 		float currentPos[3]; 
-		GetOrigin(this.greenEnd, currentPos);
+		Vscripts_GetOrigin(this.greenEnd, currentPos);
 		float moveVector[3] =  { 0.0, ... };
 		moveVector[0] = dx * CELL_SIZE;
 		moveVector[1] = dy * CELL_SIZE;
 		float tmp[3];
 		AddVectors(currentPos, moveVector, tmp);
-		SetOrigin(this.greenEnd, tmp);
+		Vscripts_SetOrigin(this.greenEnd, tmp);
 	}
 	
 	public void MoveGreen(float dx, float dy) 
@@ -153,8 +153,8 @@ methodmap Chess < Basic
 	public void MoveStartToEnd(int start, int end) 
 	{
 		float e_Orig[3];
-		GetOrigin(end, e_Orig);
-		SetOrigin(start, e_Orig);
+		Vscripts_GetOrigin(end, e_Orig);
+		Vscripts_SetOrigin(start, e_Orig);
 	}
 	
 	public void UpdatePurple(float dx, float dy) 
@@ -166,13 +166,13 @@ methodmap Chess < Basic
 	public void UpdatePurpleEnd(float dx, float dy) 
 	{
 		float currentPos[3]; 
-		GetOrigin(this.purpleEnd, currentPos);
+		Vscripts_GetOrigin(this.purpleEnd, currentPos);
 		float moveVector[3] =  { 0.0, ... };
 		moveVector[0] = dx * CELL_SIZE;
 		moveVector[1] = dy * CELL_SIZE;
 		float tmp[3];
 		AddVectors(currentPos, moveVector, tmp);
-		SetOrigin(this.purpleEnd, tmp);
+		Vscripts_SetOrigin(this.purpleEnd, tmp);
 	}
 	
 	public void MovePurple(float dx, float dy) 
@@ -195,7 +195,7 @@ methodmap Chess < Basic
 		if (dx + dy == 1.0)
 		{
 			this.bDead = true;
-			EntFire("TotalTrigger", "FireUser2", "", "0.0", -1);
+			Vscripts_EntFire("TotalTrigger", "FireUser2", "", 0.0, -1);
 		}
 	}
 }
@@ -236,7 +236,7 @@ public bool SphereCollideWithWorld(const float orig[3], const float radius, floa
 
 			float end[3];
 			AddVectors(orig, vec, end);
-			float dist = TraceLine(orig, end, entity);
+			float dist = Vscripts_TraceLine(orig, end, entity);
 			if ( 0 < dist && dist < minDist)
 			{
 				ScaleVector(vec, dist);
@@ -412,8 +412,8 @@ methodmap Eye < Basic
     	       GetClientTeam(currentPlayer) == this.bossTeamTarget)
     	    {
     	        float tmp[3], s_orig[3], p_orig[3];
-    	        GetOrigin(this.entity, s_orig);
-    	        GetOrigin(currentPlayer, p_orig);
+    	        Vscripts_GetOrigin(this.entity, s_orig);
+    	        Vscripts_GetOrigin(currentPlayer, p_orig);
     	        SubtractVectors(s_orig, p_orig, tmp);
     	        float length = GetVectorLength(tmp);
 
@@ -463,12 +463,12 @@ methodmap Eye < Basic
 		
     	// Get the center and end point
     	float cnt[3];
-    	GetOrigin(this.entity, cnt);
+    	Vscripts_GetOrigin(this.entity, cnt);
 	
     	// Make the boss face the target
     	float tmp[3];
     	this.GetVel(tmp);
-    	SetForwardVector(this.entity, tmp);
+    	Vscripts_SetForwardVector(this.entity, tmp);
 	
     	// If there is an impact, bounce
     	float collPoint[3];
@@ -490,18 +490,18 @@ methodmap Eye < Basic
     		ScaleVector(norm_copy, 2 * dot);
     		SubtractVectors(tmp, norm_copy, tmp);
     		this.SetVel(tmp);
-    		EntFireByIndex(this.entity, "FireUser1", "", "0.0", this.target);
+    		Vscripts_EntFireByIndex(this.entity, "FireUser1", "", 0.0, this.target);
     		// Move as far as we can
     		ScaleVector(norm, this.bossRadius);
     		AddVectors(cnt, norm, tmp);
-    		SetOrigin(this.entity, tmp);
+    		Vscripts_SetOrigin(this.entity, tmp);
     	}
     	else
     	{
     		
     		this.GetVel(tmp);
     		AddVectors(cnt, tmp, tmp);
-    		SetOrigin(this.entity, tmp);
+    		Vscripts_SetOrigin(this.entity, tmp);
     	}
     }
 	
@@ -541,9 +541,9 @@ methodmap Eye < Basic
     	// Try moving towards our target if it exists, otherwise don't
     	
     	float tgtPos[3];
-    	GetOrigin(this.target, tgtPos);
+    	Vscripts_GetOrigin(this.target, tgtPos);
     	float bssPos[3];
-    	GetOrigin(this.entity, bssPos);
+    	Vscripts_GetOrigin(this.entity, bssPos);
     	float dir[3];
     	SubtractVectors(tgtPos, bssPos, dir);
 	
